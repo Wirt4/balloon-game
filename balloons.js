@@ -1,14 +1,20 @@
+//styalistic choices I dislike...
+//struct style iniation of objects
+//use of global var??? (still tricky on that one)
+
 var Game = {
     canvas : undefined,
     conavasContext: undefined,
     balloonSprite, undefined
 };
 
+
+
 Game.balloonSprite = {
     witdh: 35,
     height: 63
 };
-
+//load the gameloop function after 500 ms, so there's time to load everything
 window.setTimeout(Game.mainloop, 500);
 
 Game.start = function(){
