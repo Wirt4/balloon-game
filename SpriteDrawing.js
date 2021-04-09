@@ -3,18 +3,26 @@
 var Game = {
     canvas : undefined,
     canvasContext : undefined,
-    balloonSprite : undefined
+    backgroundSprite: undefined,
+    balloonSprite : undefined,
+    balloonPosition : {x : 0, y : 50},
+    backgroundMusic : undefined
 };
 
 Game.start = function () {
     Game.canvas = document.getElementById("myCanvas");
     Game.canvasContext = Game.canvas.getContext("2d");
     Game.balloonSprite = new Image();
+    Game.backgroundSprite = new Image();
     Game.balloonSprite.src = "spr_balloon.png";
+    Game.backgroundSprite.src ="sprite_background.jpg";
+    Game.backgroundMusic = new Audio();
+    Game.backgroundMusic.src = "urban_sunrise.mp3";
     window.setTimeout(Game.mainLoop, 500);
 };
 
 document.addEventListener( 'DOMContentLoaded', Game.start);
+
 
 Game.clearCanvas = function () {
     Game.canvasContext.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
@@ -36,8 +44,13 @@ Game.mainLoop = function() {
 };
 
 Game.update = function () {
+    const d = new Date();
+    Game.balloonPosition.x = d.getTime() % Game.canvas.width;
 };
 
 Game.draw = function () {
-    Game.drawImage(Game.balloonSprite, { x : 100, y : 100 });
+    Game.drawImage(Game.backgroundSprite, {x: 0, y: 0});
+    //Game.drawImage(Game.balloonSprite, Game.baloonPosition);
+    Game.drawImage(Game.balloonSprite, Game.balloonPosition);
+    Game.drawImage(Game.balloonSprite, {x:50, y:100});
 };
