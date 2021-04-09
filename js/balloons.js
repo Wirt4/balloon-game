@@ -1,27 +1,30 @@
-//styalistic choices I dislike...
-//struct style iniation of objects
-//use of global var??? (still tricky on that one)
+"use strict";
 
 var Game = {
-    canvas : undefined,
-    conavasContext: undefined,
-    balloonSprite, undefined
+	canvas : undefined,
+	canvasContext : undefined,
+    balloonSprite : undefined
 };
-
-Game.balloonSprite = {
-    witdh: 35,
-    height: 63
-};
-//load the gameloop function after 500 ms, so there's time to load everything
-//window.setTimeout(Game.mainloop, 500);
 
 Game.start = function(){
-    Game.canvas = document.getElementById ='myCanvas';
-    Game.canvasContext = Game.canvas.getContext('2d');
+    Game.canvas = document.getElementById("myCanvas");
+    //problem with line 14
+    Game.canvasContext = Game.canvas.getContext("2d");
     Game.balloonSprite = new Image();
-    Game.balloonSprite.src  = 'sprites/spr_balloon.png';
-    window.setTimeout(Game.mainLoop, 500);
-}
+    Game.balloonSprite.src ='bloon.png';
+    Game.draw();
+    //window.setTimeout(Game.mainLoop, 500);
+};
 
-//TODO: write index.html with a canvas for this game to use
-//write 
+Game.draw = function(){
+    Game.drawImage(Game.balloonSprite, {x:100, y:100});
+};
+
+Game.drawImage = function(sprite, position){
+    Game.canvasContext.save();
+    Game.canvasContext.translate(position.x, position.y);
+    Game.canvasContext.drawImage(sprite,0,0,sprite.width,sprite.height,0,0,sprite.width, sprite.height);
+    Game.canvasContext.restore();
+};
+
+addEventListener('DOMContentLoaded', Game.start);
