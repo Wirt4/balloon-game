@@ -8,4 +8,7 @@ img.onload = function(){
   context.drawImage(img, 0,0);
 }
 // now set the image's src
-img.src = "spr_balloon.png";
+img.src = "js/sprites/spr_balloon.png";
+
+//CAN run debugger through Chrome, but not 'Chrome against localhost', need to 
+//delecte the .vscode file generated so to run with the better out-of-the-box settings
