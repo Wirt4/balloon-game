@@ -1,0 +1,1 @@
+Might want to try undulating the speed (but not direction) of sprites with a sin wave
