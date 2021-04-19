@@ -1,14 +1,23 @@
 'use strict';
 
-function handleMouseMove(evt) {
-    Game.mousePosition = { x: evt.pageX, y: evt.pageY };
+var Mouse = {
+    position: { x: 0, y: 0 },
+}
+
+Mouse.handleMouseMove = function(evt) {
+    Mouse.position = { x: evt.pageX, y: evt.pageY };
+}
+
+var Canvas2D ={
+    canvas: undefined,
+    context: undefined
 }
 
 var Game = {
-    canvas: undefined,
-    canvasContext: undefined,
     backgroundSprite: undefined,
-    mousePosition: { x: 0, y: 0 },
+};
+
+var cannon = {
     cannonBarrelSprite: undefined,
     //below are constant values
     cannonPosition: { x: 72, y: 400 },
@@ -16,51 +25,48 @@ var Game = {
     cannonRotation: 0
 };
 
-Game.clearCanvas = function () {
-    Game.canvasContext.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
+Canvas2D.clearCanvas = function () {
+    Canvas2D.context.clearRect(0, 0, Canvas2D.canvas.width, Canvas2D.canvas.height);
 }
 
-Game.update = function () {
-    var opp = Game.mousePosition.y - Game.cannonPosition.y;
-    var adj = Game.mousePosition.x - Game.cannonPosition.x;
-    Game.cannonRotation = Math.atan2(opp, adj);
+cannon.update = function () {
+    var opp = Mouse.position.y - cannon.cannonPosition.y;
+    var adj = Mouse.position.x - cannon.cannonPosition.x;
+    cannon.cannonRotation = Math.atan2(opp, adj);
 }
 
-Game.drawImage = function (image, position, rotation, origin) {
+Canvas2D.drawImage = function (image, position, rotation, origin) {
     //note the save, restore pattern
-    Game.canvasContext.save();
+    Canvas2D.context.save();
     //note the first translate, then draw idiom
-    Game.canvasContext.translate(position.x, position.y);
-    Game.canvasContext.rotate(rotation);
-    Game.canvasContext.drawImage(image, 0, 0, image.width, image.height, -origin.x, -origin.y, image.width, image.height);
-    Game.canvasContext.restore();
+    Canvas2D.context.translate(position.x, position.y);
+    Canvas2D.context.rotate(rotation);
+    Canvas2D.context.drawImage(image, 0, 0, image.width, image.height, -origin.x, -origin.y, image.width, image.height);
+    Canvas2D.context.restore();
 }
 
-Game.draw = function () {
-    Game.clearCanvas();
-    Game.drawImage(Game.backgroundSprite, { x: 0, y: 0 }, 0, { x: 0, y: 0 });
-    //Game.balloonOrigin = { x: Game.balloonSprite.width / 2, y: Game.balloonSprite.height / 2 };
-    Game.drawImage(Game.cannonBarrelSprite, Game.cannonPosition, Game.cannonRotation, Game.cannonOrigin);
+Canvas2D.draw = function () {
+    Canvas2D.clearCanvas();
+    Canvas2D.drawImage(Game.backgroundSprite, { x: 0, y: 0 }, 0, { x: 0, y: 0 });
+    Canvas2D.drawImage(cannon.cannonBarrelSprite, cannon.cannonPosition, cannon.cannonRotation, cannon.cannonOrigin);
 }
 
 Game.mainLoop = function () {
     // Game.clearCanvas(); //implement
-    Game.update();
-    Game.draw();
+    cannon.update();
+    Canvas2D.draw();
     window.setTimeout(Game.mainLoop, 1000 / 60);
 }
 
 Game.start = function () {
-    Game.canvas = document.getElementById("myCanvas");
-    Game.canvasContext = Game.canvas.getContext("2d");
+    Canvas2D.canvas = document.getElementById("myCanvas");
+    Canvas2D.context = Canvas2D.canvas.getContext("2d");
     //notice the odd idiom on line 28, how it passes a doc event to a function
-    document.onmousemove = handleMouseMove;
+    document.onmousemove = Mouse.handleMouseMove;
     Game.backgroundSprite = new Image();
     Game.backgroundSprite.src = "assets/images/spr_background.jpg";
-    //Game.balloonSprite = new Image();
-    //Game.balloonSprite.src = "assets/images/spr_balloon.png";
-    Game.cannonBarrelSprite = new Image();
-    Game.cannonBarrelSprite.src = "assets/images/spr_cannon_barrel.png";
+    cannon.cannonBarrelSprite = new Image();
+    cannon.cannonBarrelSprite.src = "assets/images/spr_cannon_barrel.png";
     window.setTimeout(Game.mainLoop, 500);
 };
 
